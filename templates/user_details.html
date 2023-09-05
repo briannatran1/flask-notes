@@ -5,7 +5,7 @@ User Details
 {% endblock %}
 
 {% block content %}
-<h1>{{ user.username }}</h1>
+<h1 class="display-2">{{ user.username }}</h1>
 
 <ul>
   <li>{{ user.first_name }}</li>
@@ -13,6 +13,27 @@ User Details
   <li>{{ user.email }}</li>
 </ul>
 
-<a class="btn btn-secondary" href="/">Back to Home</a>
+<h1 class="display-5">Notes:</h1>
+<ul>
+  {% for note in notes %}
+  <li>
+    <a href="/notes/{{ note.id }}/update">{{ user.note }}</a>
+    <a class="btn btn-danger" href="/notes/{{ note.id }}/delete">Delete</a>
+  </li>
+  {% endfor %}
+</ul>
 
+<form>
+  <button
+  class="btn btn-info"
+  formaction="/users/{{ user.username }}/notes/add"
+  formmethod="POST">Add Note</button>
+  <button
+  class="btn btn-danger"
+  formaction="/users/{{ user.username }}/delete"
+  formmethod="POST">Delete User</button>
+  <button
+  class="btn btn-primary"
+  formaction="/" formmethod="GET">Back To Home</button>
+</form>
 {% endblock %}
