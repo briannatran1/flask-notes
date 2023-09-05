@@ -27,3 +27,6 @@ class LoginForm(FlaskForm):
                            validators=[InputRequired()])
     password = PasswordField('Password',
                              validators=[InputRequired()])
+
+class CSRFProtectForm(FlaskForm):
+    """Form just for CSRF Protection"""
