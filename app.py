@@ -25,12 +25,15 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 toolbar = DebugToolbarExtension(app)
 
+# make global constant for session var username
+
 
 @app.get('/')
 def redirect_to_register():
     """Redirects back to register page"""
     form = CSRFProtectForm()
 
+    # redirect to register
     return render_template('index.html',
                            form=form)
 
@@ -38,6 +41,8 @@ def redirect_to_register():
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     """Register form; handle registering user"""
+    # if user is in session, redirect to user profile
+
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -67,6 +72,7 @@ def register_user():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Produce login form or handle login."""
+    # if user is in session, redirect to user profile
 
     form = LoginForm()
 
@@ -91,6 +97,7 @@ def display_user(username):
     """Displays user information"""
     user = User.query.get_or_404(username)
 
+    # use this for previous routes
     if "username" not in session:
         flash("You must be logged in to view page")
         return redirect('/')

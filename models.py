@@ -62,6 +62,8 @@ class User(db.Model):
                    first_name=first_name,
                    last_name=last_name)
 
+    # sometimes better to db.session.add user here
+
     @classmethod
     def authenticate(cls, username, password):
         """Validate that user exists and password is correct.
