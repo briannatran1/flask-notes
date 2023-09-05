@@ -3,9 +3,9 @@ import os
 
 from models import db, connect_db, User
 from flask_debugtoolbar import DebugToolbarExtension
-from flask import Flask, request, render_template
+from flask import Flask, render_template, session, flash, redirect
 from flask_bcrypt import Bcrypt
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, CSRFProtectForm
 
 app = Flask(__name__)
 
@@ -30,13 +30,62 @@ toolbar = DebugToolbarExtension(app)
 def redirect_to_register():
     """Redirects back to register page"""
 
-    return render_template('register.html')
+    form = CSRFProtectForm()
+
+    return render_template('register.html', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register_user():
+def register_user(username):
     """Register form; handle registering user"""
     form = RegisterForm()
 
     if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
 
+        user = User.register(username=username,
+                             password=password,
+                             email=email,
+                             first_name=first_name,
+                             last_name=last_name)
+
+        db.session.add(user)
+        db.session.commit()
+
+        session["username"] = user.username
+
+        return redirect("/users/<username>")
+
+    else:
+        return render_template("register.html", form=form)
+
+@app.route("/login", methods=["GET", "POST"])
+def login(username):
+    """Produce login form or handle login."""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.authenticate(username, password)
+
+        if user:
+            session["username"] = user.username
+            return redirect("/users/<username>")
+
+        else:
+            form.username.errors = ["Invalid Credentials"]
+
+    return render_template("login.html", form=form)
+
+@app.get("/users/<username>")
+def display_user(username):
+    """Displays user information"""
+
+    return render_template("user_details.html", username)
