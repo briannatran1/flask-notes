@@ -17,23 +17,18 @@ User Details
 <ul>
   {% for note in notes %}
   <li>
-    <a href="/notes/{{ note.id }}/update">{{ user.note }}</a>
-    <a class="btn btn-danger" href="/notes/{{ note.id }}/delete">Delete</a>
+    <h6>{{ note.title }}</h6>
+    <p>{{ note.content }} </p>
+    <a class="btn btn-danger mb-4" href="/notes/{{ note.id }}/delete">Delete</a>
   </li>
   {% endfor %}
 </ul>
 
 <form>
-  <button
-  class="btn btn-info"
-  formaction="/users/{{ user.username }}/notes/add"
-  formmethod="POST">Add Note</button>
-  <button
-  class="btn btn-danger"
-  formaction="/users/{{ user.username }}/delete"
-  formmethod="POST">Delete User</button>
-  <button
-  class="btn btn-primary"
-  formaction="/" formmethod="GET">Back To Home</button>
+  <button class="btn btn-info" formaction="/users/{{ user.username }}/notes/add" formmethod="POST">Add Note</button>
+
+  <button class="btn btn-danger" formaction="/users/{{ user.username }}/delete" formmethod="POST">Delete User</button>
+
+  <button class="btn btn-primary" formaction="/" formmethod="GET">Back To Home</button>
 </form>
 {% endblock %}
