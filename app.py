@@ -29,14 +29,14 @@ toolbar = DebugToolbarExtension(app)
 @app.get('/')
 def redirect_to_register():
     """Redirects back to register page"""
-
     form = CSRFProtectForm()
 
-    return render_template('register.html', form=form)
+    return render_template('index.html',
+                           form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register_user(username):
+def register_user():
     """Register form; handle registering user"""
     form = RegisterForm()
 
@@ -58,13 +58,14 @@ def register_user(username):
 
         session["username"] = user.username
 
-        return redirect("/users/<username>")
+        return redirect(f"/users/{username}")
 
     else:
         return render_template("register.html", form=form)
 
+
 @app.route("/login", methods=["GET", "POST"])
-def login(username):
+def login():
     """Produce login form or handle login."""
 
     form = LoginForm()
@@ -77,15 +78,33 @@ def login(username):
 
         if user:
             session["username"] = user.username
-            return redirect("/users/<username>")
+            return redirect(f"/users/{username}")
 
         else:
             form.username.errors = ["Invalid Credentials"]
 
     return render_template("login.html", form=form)
 
+
 @app.get("/users/<username>")
 def display_user(username):
     """Displays user information"""
+    user = User.query.get_or_404(username)
 
-    return render_template("user_details.html", username)
+    if "username" not in session:
+        flash("You must be logged in to view page")
+        return redirect('/')
+    else:
+        return render_template("user_details.html",
+                               user=user)
+
+
+@app.post('/logout')
+def logout():
+    """Logs out user and redirects to register user"""
+    form = CSRFProtectForm()
+
+    if form.validate_on_submit():
+        session.pop('username', None)
+
+    return redirect('/')
