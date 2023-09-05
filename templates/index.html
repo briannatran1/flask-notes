@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="display-4 mb-3">Register or Login</h1>
+
+<ul class="list-unstyled">
+  {% if 'username' not in session %}
+  <li><a href="/register" class="btn btn-primary mb-3">Register</a></li>
+  <li><a href="/login" class="btn btn-primary">Login</a></li>
+  {% endif %}
+</ul>
+
+{% if 'username' in session %}
+<form action="/logout" method="POST">
+  {{form.hidden_tag()}}
+  <button type="submit" class="btn btn-primary">Logout</button>
+</form>
+{% endif %}
+
+{% endblock %}

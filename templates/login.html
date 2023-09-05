@@ -3,20 +3,21 @@
 {% block title %} Login Here {% endblock %}
 
 {% block content %}
-  <form id="login-form" method="POST">
-    {{ form.hidden_tag() }}
+<h1>Login</h1>
+<form id="login-form" method="POST" class="mt-4" action="/login">
+  {{ form.hidden_tag() }}
 
-    {% for field in form
-    if field.widget.input_type != 'hidden' %}
-    <p>
-      {{ field.label }}
-      {{ field }}
+  {% for field in form
+  if field.widget.input_type != 'hidden' %}
+  <p>
+    {{ field.label }}
+    {{ field }}
 
-      {% for error in field.errors %}
-      {{ error }}
-      {% endfor %}
-    </p>
+    {% for error in field.errors %}
+    {{ error }}
     {% endfor %}
-    <button class="btn btn-primary" type="submit">Login</button>
-  </form>
+  </p>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">Login</button>
+</form>
 {% endblock %}

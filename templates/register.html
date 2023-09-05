@@ -3,20 +3,21 @@
 {% block title %} Register Here {% endblock %}
 
 {% block content %}
-  <form id="register-form" method="POST">
-    {{ form.hidden_tag() }}
+<h1>Register New User</h1>
+<form id="register-form" method="POST" class="mt-4" action="/register">
+  {{ form.hidden_tag() }}
 
-    {% for field in form
-    if field.widget.input_type != 'hidden' %}
-    <p>
-      {{ field.label }}
-      {{ field }}
+  {% for field in form
+  if field.widget.input_type != 'hidden' %}
+  <p>
+    {{ field.label }}
+    {{ field }}
 
-      {% for error in field.errors %}
-      {{ error }}
-      {% endfor %}
-    </p>
+    {% for error in field.errors %}
+    {{ error }}
     {% endfor %}
-    <button class="btn btn-primary" type="submit">Register</button>
-  </form>
+  </p>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">Register</button>
+</form>
 {% endblock %}
