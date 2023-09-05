@@ -5,7 +5,7 @@ from models import db, connect_db, User, Note
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, render_template, session, flash, redirect
 from flask_bcrypt import Bcrypt
-from forms import RegisterForm, LoginForm, CSRFProtectForm
+from forms import RegisterForm, LoginForm, CSRFProtectForm, AddNoteForm
 
 app = Flask(__name__)
 
@@ -118,6 +118,7 @@ def logout():
 
     return redirect('/')
 
+
 @app.post("/users/<username>/delete")
 def delete_user(username):
     """Deletes user from database"""
@@ -131,3 +132,34 @@ def delete_user(username):
         db.session.commit()
 
     return redirect("/")
+
+
+@app.route('/users/<username>/notes/add', methods=['GET', 'POST'])
+def add_note(username):
+    """Produce add note form or handle adding notes"""
+    form = AddNoteForm()
+
+    user = User.query.get_or_404(username)
+
+    if user:
+        if form.validate_on_submit():
+            title = form.title.data
+            content = form.content.data
+
+            note = Note(title=title,
+                        content=content,
+                        owner_username=username)
+
+            db.session.add(note)
+            db.session.commit()
+
+            return redirect(f'/users/{username}')
+            # return render_template('user_details.html',
+            #                        notes=notes,
+            #                        user=user)
+    else:
+        return redirect('/')
+
+    return render_template("add_note.html",
+                           form=form,
+                           user=user)
