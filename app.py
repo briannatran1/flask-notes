@@ -1,7 +1,7 @@
 """Flask app for Notes"""
 import os
 
-from models import db, connect_db, User
+from models import db, connect_db, User, Note
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, render_template, session, flash, redirect
 from flask_bcrypt import Bcrypt
@@ -96,6 +96,7 @@ def login():
 def display_user(username):
     """Displays user information"""
     user = User.query.get_or_404(username)
+    notes = Note.query.all()
 
     # use this for previous routes
     if "username" not in session:
@@ -103,7 +104,8 @@ def display_user(username):
         return redirect('/')
     else:
         return render_template("user_details.html",
-                               user=user)
+                               user=user,
+                               notes=notes)
 
 
 @app.post('/logout')
@@ -115,3 +117,17 @@ def logout():
         session.pop('username', None)
 
     return redirect('/')
+
+@app.post("/users/<username>/delete")
+def delete_user(username):
+    """Deletes user from database"""
+
+    if "username" in session:
+        user = User.query.get_or_404(username)
+
+        session.pop("username", None)
+
+        db.session.delete(user)
+        db.session.commit()
+
+    return redirect("/")
