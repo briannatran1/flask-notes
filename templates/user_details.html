@@ -1,10 +1,5 @@
-{% extends 'base.html' %}
-
-{% block title %}
-User Details
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} User Details {% endblock %} {% block
+content %}
 <h1 class="display-2">{{ user.username }}</h1>
 
 <ul>
@@ -18,17 +13,41 @@ User Details
   {% for note in notes %}
   <li>
     <h6>{{ note.title }}</h6>
-    <p>{{ note.content }} </p>
-    <a class="btn btn-danger mb-4" href="/notes/{{ note.id }}/delete">Delete</a>
+    <p>{{ note.content }}</p>
+    <form>
+      <button
+      class="btn btn-secondary mb-4"
+      formaction="/notes/{{ note.id }}/update"
+      formmethod="GET">Edit</button>
+      <button
+      class="btn btn-danger mb-4"
+      formaction="/notes/{{ note.id }}/delete"
+      formmethod="POST">Delete</button>
+    </form>
+
   </li>
   {% endfor %}
 </ul>
 
 <form>
-  <button class="btn btn-info" formaction="/users/{{ user.username }}/notes/add" formmethod="POST">Add Note</button>
+  <button
+    class="btn btn-info"
+    formaction="/users/{{ user.username }}/notes/add"
+    formmethod="POST"
+  >
+    Add Note
+  </button>
 
-  <button class="btn btn-danger" formaction="/users/{{ user.username }}/delete" formmethod="POST">Delete User</button>
+  <button
+    class="btn btn-danger"
+    formaction="/users/{{ user.username }}/delete"
+    formmethod="POST"
+  >
+    Delete User
+  </button>
 
-  <button class="btn btn-primary" formaction="/" formmethod="GET">Back To Home</button>
+  <button class="btn btn-primary" formaction="/" formmethod="GET">
+    Back To Home
+  </button>
 </form>
 {% endblock %}
