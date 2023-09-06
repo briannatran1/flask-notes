@@ -10,19 +10,13 @@ content %}
 
 <h1 class="display-5">Notes:</h1>
 <ul>
-  {% for note in notes %}
+  {% for note in user.notes %}
   <li>
     <h6>{{ note.title }}</h6>
     <p>{{ note.content }}</p>
     <form>
-      <button
-      class="btn btn-secondary mb-4"
-      formaction="/notes/{{ note.id }}/update"
-      formmethod="GET">Edit</button>
-      <button
-      class="btn btn-danger mb-4"
-      formaction="/notes/{{ note.id }}/delete"
-      formmethod="POST">Delete</button>
+      <button class="btn btn-secondary mb-4" formaction="/notes/{{ note.id }}/update" formmethod="GET">Edit</button>
+      <button class="btn btn-danger mb-4" formaction="/notes/{{ note.id }}/delete" formmethod="POST">Delete</button>
     </form>
 
   </li>
@@ -30,23 +24,15 @@ content %}
 </ul>
 
 <form>
-  <button
-    class="btn btn-info"
-    formaction="/users/{{ user.username }}/notes/add"
-    formmethod="POST"
-  >
+  <button class="btn btn-info" formaction="/users/{{ user.username }}/notes/add" formmethod="POST">
     Add Note
   </button>
 
-  <button
-    class="btn btn-danger"
-    formaction="/users/{{ user.username }}/delete"
-    formmethod="POST"
-  >
+  <button class="btn btn-danger" formaction="/users/{{ user.username }}/delete" formmethod="POST">
     Delete User
   </button>
 
-  <button class="btn btn-primary" formaction="/" formmethod="GET">
+  <button class="btn btn-primary" formaction="/home" formmethod="GET">
     Back To Home
   </button>
 </form>
